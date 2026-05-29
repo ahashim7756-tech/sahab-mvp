@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سحاب - نموذج أولي | Sahab MVP</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --sky-blue: #4A90E2;
+      --warm-gold: #F5A623;
+      --white: #FFFFFF;
+      --light-gray: #F8F9FA;
+      --dark-text: #2C3E50;
+      --border-color: #E0E0E0;
+      --focus-outline: 3px solid #F5A623;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light-gray);
+      color: var(--dark-text);
+      line-height: 1.8;
+      padding: 20px;
+      font-size: 18px;
+    }
+
+    /* Accessibility: skip link */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--sky-blue);
+      color: #fff;
+      padding: 8px;
+      z-index: 100;
+      transition: top 0.2s;
+    }
+    .skip-link:focus {
+      top: 10px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 40px 30px;
+    }
+
+    h1, h2, h3 {
+      color: var(--sky-blue);
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 1.2em;
+      color: #777;
+      margin-bottom: 30px;
+    }
+
+    .upload-area {
+      border: 2px dashed var(--sky-blue);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      background: #F0F8FF;
+      margin: 20px 0;
+      transition: background 0.3s;
+    }
+    .upload-area:hover {
+      background: #E6F0FF;
+    }
+    .upload-area i {
+      font-size: 3em;
+      color: var(--sky-blue);
+      margin-bottom: 10px;
+    }
+    .upload-area p {
+      font-weight: bold;
+    }
+    .upload-area input {
+      display: block;
+      margin: 15px auto 0;
+    }
+
+    button, .btn {
+      background-color: var(--sky-blue);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 1.1em;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    button:hover, .btn:hover {
+      background-color: #3A7BD5;
+    }
+    button:focus-visible, .btn:focus-visible {
+      outline: var(--focus-outline);
+      outline-offset: 2px;
+    }
+    .btn-gold {
+      background-color: var(--warm-gold);
+    }
+    .btn-gold:hover {
+      background-color: #E5941E;
+    }
+
+    .output-section {
+      margin-top: 30px;
+      background: #FAFBFC;
+      border-radius: 15px;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    .tab {
+      background: transparent;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 8px;
+      color: var(--dark-text);
+      font-weight: bold;
+    }
+    .tab.active {
+      background-color: var(--sky-blue);
+      color: white;
+    }
+    .tab:focus-visible {
+      outline: var(--focus-outline);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #simplified-text {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 1.2em;
+      border-right: 5px solid var(--warm-gold);
+    }
+
+    .steps-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .step-icon {
+      font-size: 2em;
+      min-width: 50px;
+      text-align: center;
+      color: var(--warm-gold);
+    }
+    .step-text {
+      font-size: 1.1em;
+    }
+
+    .audio-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    #comprehension-graph {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      height: 150px;
+      margin: 20px 0;
+    }
+    .graph-bar {
+      width: 50px;
+      background: var(--sky-blue);
+      border-radius: 6px 6px 0 0;
+      transition: height 0.5s;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* Form steps */
+    .form-step {
+      display: none;
+    }
+    .form-step.active {
+      display: block;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #eee;
+      border-radius: 10px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--warm-gold);
+      transition: width 0.3s;
+    }
+
+    input[type="text"], input[type="file"] {
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 1em;
+      margin: 10px 0;
+    }
+    input:focus {
+      outline: var(--focus-outline);
+      border-color: var(--sky-blue);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #888;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
+  <div class="container" id="main-content">
+    <h1>
+      <i class="fas fa-cloud" aria-hidden="true"></i> سحاب
+    </h1>
+    <p class="subtitle">مُعين + رفيق - نموذج أولي</p>
+
+    <!-- Upload Section -->
+    <div class="upload-area" aria-label="منطقة رفع المستند">
+      <i class="fas fa-file-alt" aria-hidden="true"></i>
+      <p>ارفع مستنداً (PDF أو نص)</p>
+      <input type="file" id="fileInput" accept=".pdf,.txt" aria-label="اختر ملف">
+      <textarea id="textInput" rows="5" placeholder="أو الصق النص هنا..." style="margin-top:15px; width:100%;"></textarea>
+      <button id="processBtn" style="margin-top:15px;"><i class="fas fa-magic"></i> ابدأ الفهم</button>
+    </div>
+
+    <!-- Mu'een Output -->
+    <div id="muaeenOutput" class="output-section" style="display:none;">
+      <h2><i class="fas fa-lightbulb"></i> مُعين - محرك الفهم</h2>
+      <div class="tabs" role="tablist">
+        <button class="tab active" onclick="switchTab(event, 'tab-simplified')">نص مبسط</button>
+        <button class="tab" onclick="switchTab(event, 'tab-visual')">خريطة بصرية</button>
+        <button class="tab" onclick="switchTab(event, 'tab-audio')">مسموع</button>
+      </div>
+      <div id="tab-simplified" class="tab-content active">
+        <div id="simplified-text"></div>
+      </div>
+      <div id="tab-visual" class="tab-content">
+        <div id="visual-steps" class="steps-visual"></div>
+      </div>
+      <div id="tab-audio" class="tab-content">
+        <div class="audio-controls">
+          <button onclick="playAudio()"><i class="fas fa-play"></i> استمع للنص المبسط</button>
+          <button onclick="pauseAudio()"><i class="fas fa-pause"></i> إيقاف</button>
+          <select id="voiceSelect" aria-label="اختر صوت"></select>
+          <label for="speedRange">السرعة: <span id="speedValue">1</span></label>
+          <input type="range" id="speedRange" min="0.5" max="2" step="0.1" value="1">
+        </div>
+      </div>
+    </div>
+
+    <!-- Rafeeq Interactive Execution -->
+    <div id="rafeeqSection" class="output-section" style="display:none;">
+      <h2><i class="fas fa-user-friends"></i> رفيق - الوكيل الإجرائي</h2>
+      <p>لنكمل الإجراء معاً خطوة بخطوة</p>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
+      <form id="executionForm">
+        <div class="form-step active" data-step="1">
+          <h3>الخطوة 1: المعلومات الشخصية</h3>
+          <label for="fullName">الاسم الكامل</label>
+          <input type="text" id="fullName" required>
+          <button type="button" class="btn" onclick="nextStep()">التالي <i class="fas fa-arrow-left"></i></button>
+        </div>
+        <div class="form-step" data-step="2">
+          <h3>الخطوة 2: رفع المستند الثبوتي</h3>
+          <input type="file" id="docUpload" accept=".pdf,.jpg,.png">
+          <div style="display:flex; gap:10px;">
+            <button type="button" class="btn btn-gold" onclick="prevStep()"><i class="fas fa-arrow-right"></i> السابق</button>
+            <button type="button" class="btn" onclick="nextStep()">التالي <i class="fas fa-arrow-left"></i></button>
+          </div>
+        </div>
+        <div class="form-step" data-step="3">
+          <h3>الخطوة 3: المراجعة والإرسال</h3>
+          <p>تم ملء البيانات التالية:</p>
+          <ul id="summaryList"></ul>
+          <div style="display:flex; gap:10px;">
+            <button type="button" class="btn btn-gold" onclick="prevStep()"><i class="fas fa-arrow-right"></i> السابق</button>
+            <button type="button" class="btn" onclick="submitForm()"><i class="fas fa-paper-plane"></i> إرسال الطلب</button>
+          </div>
+        </div>
+      </form>
+      <div id="completionMessage" style="display:none; margin-top:20px; background:#E6FFE6; padding:20px; border-radius:12px;">
+        <i class="fas fa-check-circle" style="font-size:2em; color:green;"></i>
+        <p>تم إرسال طلبك بنجاح! رقم المتابعة: <strong id="trackingNumber"></strong></p>
+      </div>
+    </div>
+
+    <!-- Digital Comprehension Graph -->
+    <div id="graphSection" class="output-section" style="display:none;">
+      <h2><i class="fas fa-chart-bar"></i> خريطة الفهم الرقمية</h2>
+      <p>كيف تفاعلت مع المستند؟</p>
+      <div id="comprehension-graph"></div>
+      <p id="graphNote" style="color:#888;"></p>
+    </div>
+  </div>
+  <div class="footer">سحاب - جميع الحقوق محفوظة 2025</div>
+
+  <script>
+    // ========== Global Variables ==========
+    let simplifiedArabicText = "";
+    let speechSynth = window.speechSynthesis;
+    let utterance = null;
+    let currentStep = 1;
+    const totalSteps = 3;
+
+    // ========== File Upload Handling ==========
+    document.getElementById('processBtn').addEventListener('click', async () => {
+      const fileInput = document.getElementById('fileInput');
+      const textInput = document.getElementById('textInput');
+      let text = "";
+
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        if (file.type === 'application/pdf') {
+          // Simple PDF text extraction using pdf.js (basic, for demo we'll just read as text)
+          const reader = new FileReader();
+          reader.onload = async function(e) {
+            const typedarray = new Uint8Array(e.target.result);
+            // Very basic, but for a demo we'll just show that it's processing
+            text = "تم استخراج النص من ملف PDF (محاكاة). يرجى إدخال نص حقيقي للاختبار.";
+            processText(text);
+          };
+          reader.readAsArrayBuffer(file);
+        } else {
+          // Assume text file
+          text = await file.text();
+          processText(text);
+        }
+      } else if (textInput.value.trim() !== "") {
+        text = textInput.value.trim();
+        processText(text);
+      } else {
+        alert("الرجاء رفع ملف أو لصق نص.");
+      }
+    });
+
+    function processText(text) {
+      // Mock simplification engine - in real app, this would use AI
+      // For demo, we'll create a simplified version with visual steps
+      const original = text;
+      // Simple rule-based simplification (replace complex words with simpler ones)
+      let simplified = original
+        .replace(/يجب على المستفيد/g, "عليك")
+        .replace(/خلال ثلاثين يوماً/g, "في غضون 30 يوم")
+        .replace(/استكمال النموذج/g, "تعبئة النموذج")
+        .replace(/تاريخ الإخطار/g, "تاريخ وصول الإشعار")
+        .replace(/المستندات الثبوتية/g, "الأوراق المطلوبة");
+
+      // If no specific simplifications, add generic summary
+      if (simplified === original) {
+        simplified = "النص المبسط: " + original.substring(0, 150) + " ... (تم تبسيط اللغة والمصطلحات).";
+      }
+
+      simplifiedArabicText = simplified;
+      
+      // Show Mu'een output
+      document.getElementById('muaeenOutput').style.display = 'block';
+      document.getElementById('simplified-text').innerHTML = `<p>${simplifiedArabicText}</p>`;
+
+      // Generate visual steps from text (mock)
+      const steps = extractSteps(original);
+      const visualContainer = document.getElementById('visual-steps');
+      visualContainer.innerHTML = steps.map((step, idx) => {
+        let icon = 'fa-circle-check';
+        if (idx === 0) icon = 'fa-file-import';
+        else if (idx === steps.length-1) icon = 'fa-paper-plane';
+        return `<div class="step-item">
+          <i class="fas ${icon} step-icon"></i>
+          <span class="step-text">${step}</span>
+        </div>`;
+      }).join('');
+
+      // Populate voices for audio tab
+      populateVoices();
+      
+      // Show Rafeeq section
+      document.getElementById('rafeeqSection').style.display = 'block';
+      // Reset form
+      resetForm();
+      
+      // Show graph section
+      document.getElementById('graphSection').style.display = 'block';
+      generateGraph(original);
+    }
+
+    function extractSteps(text) {
+      // Mock extraction: split by periods or newlines and filter
+      const sentences = text.split(/[.،\n]/).filter(s => s.trim().length > 10);
+      if (sentences.length > 3) {
+        return sentences.slice(0, 4).map((s, i) => `الخطوة ${i+1}: ${s.trim()}`);
+      } else {
+        return ["الخطوة 1: تجهيز المستندات", "الخطوة 2: تعبئة النموذج", "الخطوة 3: إرسال الطلب"];
+      }
+    }
+
+    // ========== Audio TTS ==========
+    function populateVoices() {
+      const voiceSelect = document.getElementById('voiceSelect');
+      voiceSelect.innerHTML = '';
+      // Wait for voices to load
+      function loadVoices() {
+        const voices = speechSynth.getVoices();
+        const arabicVoices = voices.filter(v => v.lang.startsWith('ar'));
+        if (arabicVoices.length === 0) {
+          const option = document.createElement('option');
+          option.textContent = 'العربية (افتراضي)';
+          voiceSelect.appendChild(option);
+        } else {
+          arabicVoices.forEach(v => {
+            const option = document.createElement('option');
+            option.textContent = v.name + ' (' + v.lang + ')';
+            option.setAttribute('data-voice', v.name);
+            voiceSelect.appendChild(option);
+          });
+        }
+      }
+      loadVoices();
+      if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoices;
+      }
+      document.getElementById('speedRange').addEventListener('input', (e) => {
+        document.getElementById('speedValue').textContent = e.target.value;
+      });
+    }
+
+    function playAudio() {
+      if (!simplifiedArabicText) return;
+      speechSynth.cancel();
+      utterance = new SpeechSynthesisUtterance(simplifiedArabicText);
+      utterance.lang = 'ar-SA';
+      const selectedVoice = document.getElementById('voiceSelect').selectedOptions[0]?.getAttribute('data-voice');
+      if (selectedVoice) {
+        const voices = speechSynth.getVoices();
+        const voice = voices.find(v => v.name === selectedVoice);
+        if (voice) utterance.voice = voice;
+      }
+      utterance.rate = parseFloat(document.getElementById('speedRange').value);
+      speechSynth.speak(utterance);
+    }
+
+    function pauseAudio() {
+      speechSynth.cancel();
+    }
+
+    // ========== Tab Switching ==========
+    function switchTab(event, tabId) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    // ========== Rafeeq Step-by-Step ==========
+    function updateProgress(step) {
+      const percent = ((step-1)/(totalSteps-1))*100;
+      document.getElementById('progressFill').style.width = percent + '%';
+    }
+
+    function nextStep() {
+      // Validate current step if needed
+      const currentFormStep = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+      if (!currentFormStep) return;
+      // Very basic validation
+      if (currentStep === 1) {
+        if (document.getElementById('fullName').value.trim() === '') {
+          alert('يرجى إدخال الاسم الكامل.');
+          return;
+        }
+      }
+      if (currentStep < totalSteps) {
+        currentFormStep.classList.remove('active');
+        currentStep++;
+        document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+        updateProgress(currentStep);
+        if (currentStep === 3) {
+          fillSummary();
+        }
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 1) {
+        document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+        currentStep--;
+        document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+        updateProgress(currentStep);
+      }
+    }
+
+    function fillSummary() {
+      const name = document.getElementById('fullName').value;
+      const docFile = document.getElementById('docUpload').files[0];
+      const list = document.getElementById('summaryList');
+      list.innerHTML = `<li>الاسم: ${name}</li>
+        <li>المستند المرفوع: ${docFile ? docFile.name : 'لم يتم رفع ملف'}</li>
+        <li>نوع الطلب: تجديد بطاقة</li>`;
+    }
+
+    function submitForm() {
+      document.getElementById('completionMessage').style.display = 'block';
+      document.getElementById('trackingNumber').textContent = 'SAH-' + Math.floor(Math.random()*100000);
+      document.getElementById('progressFill').style.width = '100%';
+      // Disable form steps
+      document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none');
+    }
+
+    function resetForm() {
+      currentStep = 1;
+      document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+      document.querySelector('.form-step[data-step="1"]').classList.add('active');
+      document.getElementById('progressFill').style.width = '0%';
+      document.getElementById('completionMessage').style.display = 'none';
+      document.getElementById('fullName').value = '';
+      document.getElementById('docUpload').value = '';
+    }
+
+    // ========== Digital Comprehension Graph ==========
+    function generateGraph(originalText) {
+      const wordCount = originalText.length;
+      // Mock data: time spent per section, etc.
+      const bars = [
+        { label: 'فهم', val: Math.min(100, wordCount/10 + 20) },
+        { label: 'حيرة', val: Math.min(100, wordCount/20 + 10) },
+        { label: 'تنفيذ', val: 30 }
+      ];
+      const graphDiv = document.getElementById('comprehension-graph');
+      graphDiv.innerHTML = bars.map((b, i) => {
+        return `<div class="graph-bar" style="height:${b.val}px;" title="${b.label}">${b.label}</div>`;
+      }).join('');
+      document.getElementById('graphNote').textContent = 'رسم توضيحي لمدى صعوبة النص الأصلي وتفاعل المستخدم.';
+    }
+  </script>
+</body>
+</html>
